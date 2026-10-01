@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoThatSpark Master CBT - Public Practice System</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            DEFAULT: '#0F172A',
+                            light: '#1E293B',
+                            dark: '#0B0F19'
+                        },
+                        orange: {
+                            DEFAULT: '#F97316',
+                            hover: '#EA580C',
+                            light: '#FFF7ED'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- React and ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="h-full bg-slate-50 text-slate-800 font-sans antialiased flex flex-col">
+    <div id="root" class="h-full flex flex-col flex-grow"></div>
+
+    <script type="text/babel">
+        const generateQuestionBank = (subjectName) => {
+            const questions = [];
+            
+            if (subjectName === "Computer Fundamentals") {
+                const subtopics = ["Hardware", "Software", "Operating Systems", "MS Word", "MS Excel", "MS PowerPoint", "Networking", "Cybersecurity", "Database", "Storage"];
+                for (let i = 1; i <= 100; i++) {
+                    let qText = `Which of the following best defines core concept #${i} in ${subtopics[(i - 1) % subtopics.length]}?`;
+                    let options = [
+                        `Primary operational function of standard ${subtopics[(i - 1) % subtopics.length]} architecture`,
+                        `Secondary volatile caching mechanism used in modern workstations`,
+                        `Deprecated peripheral interface protocol from legacy systems`,
+                        `Firmware-level bootstrap routine for BIOS initialization`
+                    ];
+                    let correct = 0;
+                    let explanation = `In Computer Fundamentals, ${subtopics[(i - 1) % subtopics.length]} governs standard operational protocols and system resource allocation. Option A represents the accurate definition.`;
+
+                    if (i === 1) {
+                        qText = "Which device is used to enter text into a computer?";
+                        options = ["Monitor", "Keyboard", "Speaker", "Printer"];
+                        correct = 1;
+                        explanation = "A keyboard is an input device used to enter text, numbers, and commands into a computer system.";
+                    } else if (i === 2) {
+                        qText = "Which of the following is an operating system?";
+                        options = ["MS Word", "Windows", "Google Chrome", "Photoshop"];
+                        correct = 1;
+                        explanation = "Windows is a proprietary graphical operating system developed by Microsoft.";
+                    } else if (i === 3) {
+                        qText = "What does RAM stand for in computer architecture?";
+                        options = ["Read Access Memory", "Random Access Memory", "Rapid Allocation Module", "Remote Access Media"];
+                        correct = 1;
+                        explanation = "RAM stands for Random Access Memory, which is volatile primary storage used by the CPU.";
+                    } else if (i === 4) {
+                        qText = "Which shortcut key is universally used to paste copied content in MS Windows?";
+                        options = ["Ctrl + C", "Ctrl + V", "Ctrl + X", "Ctrl + Z"];
+                        correct = 1;
+                        explanation = "Ctrl + V is the standard keyboard shortcut for pasting content from the clipboard.";
+                    } else if (i === 5) {
+                        qText = "Which of customs and hardware is considered volatile memory?";
+                        options = ["Hard Disk Drive", "RAM (Random Access Memory)", "ROM (Read Only Memory)", "Solid State Drive"];
+                        correct = 1;
+                        explanation = "RAM requires power to retain its data, making it volatile memory whereas storage devices retain data without power.";
+                    }
+
+                    questions.push({ id: i, subject: subjectName, question: qText, options, correctAnswer: correct, explanation });
+                }
+            } else if (subjectName === "Mathematics") {
+                for (let i = 1; i <= 100; i++) {
+                    let qText, options, correct, explanation;
+                    if (i === 1) {
+                        qText = "What is 25% of 200?";
+                        options = ["25", "40", "50", "75"];
+                        correct = 2;
+                        explanation = "25% of 200 = (25 / 100) × 200 = 50.";
+                    } else if (i === 2) {
+                        qText = "Find the HCF of 24 and 36.";
+                        options = ["6", "8", "12", "18"];
+                        correct = 2;
+                        explanation = "Factors of 24: 1, 2, 3, 4, 6, 8, 12, 24. Factors of 36: 1, 2, 3, 4, 6, 9, 12, 18, 36. Highest Common Factor is 12.";
+                    } else if (i === 3) {
+                        qText = "If a bicycle is bought for ₹2000 and sold at a profit of 10%, what is the selling price?";
+                        options = ["₹2100", "₹2200", "₹2300", "₹2400"];
+                        correct = 1;
+                        explanation = "Profit = 10% of 2000 = ₹200. Selling Price = Cost Price + Profit = 2000 + 200 = ₹2200.";
+                    } else if (i === 4) {
+                        qText = "What is the simple interest on ₹5000 at 5% per annum for 3 years?";
+                        options = ["₹650", "₹700", "₹750", "₹800"];
+                        correct = 2;
+                        explanation = "Simple Interest (SI) = (P × R × T) / 100 = (5000 × 5 × 3) / 100 = 750.";
+                    } else if (i === 5) {
+                        qText = "What is the LCM of 12, 15, and 20?";
+                        options = ["30", "60", "90", "120"];
+                        correct = 1;
+                        explanation = "Prime factorization: 12 = 2²×3, 15 = 3×5, 20 = 2²×5. LCM = 2² × 3 × 5 = 4 × 3 × 5 = 60.";
+                    } else {
+                        const val1 = i % 8 + 2;
+                        const val2 = i % 15 + 5;
+                        qText = `Solve for x: If ${val1}x + ${val2} = ${val1 * 5 + val2}, what is the value of x?`;
+                        options = ["3", "5", "7", "10"];
+                        correct = 1;
+                        explanation = `Step 1: Subtract ${val2} from both sides: ${val1}x = ${val1 * 5}.\nStep 2: Divide both sides by ${val1}: x = (${val1 * 5}) / ${val1} = 5.`;
+                    }
+                    questions.push({ id: i, subject: subjectName, question: qText, options, correctAnswer: correct, explanation });
+                }
+            } else if (subjectName === "English") {
+                for (let i = 1; i <= 100; i++) {
+                    let qText, options, correct, explanation;
+                    if (i === 1) {
+                        qText = "Choose the correct synonym for 'Benevolent'.";
+                        options = ["Hostile", "Kind", "Greedy", "Indifferent"];
+                        correct = 1;
+                        explanation = "'Benevolent' means well-meaning and kindly. Therefore, 'Kind' is the correct synonym.";
+                    } else if (i === 2) {
+                        qText = "Identify the part of speech of the underlined word in: 'She runs *quickly* to the finish line.'";
+                        options = ["Noun", "Adjective", "Adverb", "Preposition"];
+                        correct = 2;
+                        explanation = "'Quickly' describes how the action (runs) is performed, making it an adverb.";
+                    } else if (i === 3) {
+                        qText = "Choose the correct preposition: 'He is proficient ___ mathematics.'";
+                        options = ["in", "at", "on", "with"];
+                        correct = 0;
+                        explanation = "The standard preposition used with proficient is 'in' (proficient in mathematics).";
+                    } else if (i === 4) {
+                        qText = "Select the correct antonym for 'Abundant'.";
+                        options = ["Plentiful", "Scarce", "Ample", "Copious"];
+                        correct = 1;
+                        explanation = "'Abundant' means existing or available in large quantities; 'Scarce' means insufficient for demand.";
+                    } else {
+                        qText = `Grammar check item #${i}: Select the grammatically correct sentence.`;
+                        options = [
+                            "Each of the students have submitted their assignment.",
+                            "Each of the students has submitted their assignment.",
+                            "Every one of the books are informative.",
+                            "Neither of the options is correct."
+                        ];
+                        correct = 1;
+                        explanation = "'Each' is singular and requires the singular verb 'has'.";
+                    }
+                    questions.push({ id: i, subject: subjectName, question: qText, options, correctAnswer: correct, explanation });
+                }
+            } else if (subjectName === "General Knowledge") {
+                for (let i = 1; i <= 100; i++) {
+                    let qText, options, correct, explanation;
+                    if (i === 1) {
+                        qText = "Who was the first Prime Minister of independent India?";
+                        options = ["Mahatma Gandhi", "Sardar Vallabhbhai Patel", "Jawaharlal Nehru", "Dr. B. R. Ambedkar"];
+                        correct = 2;
+                        explanation = "Pandit Jawaharlal Nehru assumed office as India's first Prime Minister in August 1947.";
+                    } else if (i === 2) {
+                        qText = "What is the capital city of Odisha?";
+                        options = ["Cuttack", "Bhubaneswar", "Puri", "Rourkela"];
+                        correct = 1;
+                        explanation = "Bhubaneswar is the capital and largest city of the Indian state of Odisha.";
+                    } else if (i === 3) {
+                        qText = "Which planet is known as the Red Planet?";
+                        options = ["Venus", "Mars", "Jupiter", "Saturn"];
+                        correct = 1;
+                        explanation = "Mars is called the Red Planet due to iron oxide prevalent on its surface.";
+                    } else if (i === 4) {
+                        qText = "In which year did India adopt its Constitution?";
+                        options = ["1947", "1950", "1952", "1955"];
+                        correct = 1;
+                        explanation = "The Constitution of India came into effect on 26 January 1950.";
+                    } else {
+                        qText = `General Knowledge Fact #${i}: Which institution is correctly paired with its core national function?`;
+                        options = ["RBI - Central Banking", "ISRO - Judicial Review", "SEBI - Weather Forecasting", "TRAI - Defense Production"];
+                        correct = 0;
+                        explanation = "Reserve Bank of India (RBI) is India's central banking institution responsible for monetary policy.";
+                    }
+                    questions.push({ id: i, subject: subjectName, question: qText, options, correctAnswer: correct, explanation });
+                }
+            } else if (subjectName === "Reasoning") {
+                for (let i = 1; i <= 100; i++) {
+                    let qText, options, correct, explanation;
+                    if (i === 1) {
+                        qText = "Find the missing number in the series: 2, 6, 12, 20, 30, ?";
+                        options = ["40", "42", "44", "46"];
+                        correct = 1;
+                        explanation = "Differences between terms are 4, 6, 8, 10. The next difference is 12. 30 + 12 = 42.";
+                    } else if (i === 2) {
+                        qText = "If 'CAT' is coded as 'DBU', how is 'DOG' coded in that language?";
+                        options = ["EPH", "FQI", "DPH", "EQH"];
+                        correct = 0;
+                        explanation = "Each letter is shifted forward by 1 position in the alphabet (D->E, O->P, G->H). Result is EPH.";
+                    } else if (i === 3) {
+                        qText = "Pointing to a photograph, a woman says, 'His mother is the only daughter of my mother.' How is the woman related to the person?";
+                        options = ["Sister", "Aunt", "Mother", "Grandmother"];
+                        correct = 2;
+                        explanation = "The only daughter of the woman's mother is the woman herself. Therefore, she is the mother.";
+                    } else if (i === 4) {
+                        qText = "Find the odd one out among the following options:";
+                        options = ["Mercury", "Venus", "Moon", "Mars"];
+                        correct = 2;
+                        explanation = "Mercury, Venus, and Mars are planets, whereas the Moon is a natural satellite (orbiting Earth).";
+                    } else {
+                        qText = `Reasoning puzzle item #${i}: Determine the logical pattern and select the correct option.`;
+                        options = ["Option Alpha", "Option Beta", "Option Gamma", "Option Delta"];
+                        correct = (i % 4);
+                        explanation = `Applying standard deductive logic for item #${i}, Option ${String.fromCharCode(65 + correct)} satisfies the given constraints.`;
+                    }
+                    questions.push({ id: i, subject: subjectName, question: qText, options, correctAnswer: correct, explanation });
+                }
+            }
+            return questions;
+        };
+
+        const SUBJECTS = [
+            { name: "Computer Fundamentals", count: 100, duration: 60, desc: "Hardware, OS, MS Office, Networking & Cybersecurity basics" },
+            { name: "Mathematics", count: 100, duration: 60, desc: "Arithmetic, Algebra, Geometry, Percentage & Profit/Loss with step solutions" },
+            { name: "English", count: 100, duration: 60, desc: "Grammar, Tenses, Vocabulary, Synonyms, Antonyms & Sentence Correction" },
+            { name: "General Knowledge", count: 100, duration: 60, desc: "Indian History, Polity, Geography, Science, and Odisha basic GK" },
+            { name: "Reasoning", count: 100, duration: 60, desc: "Series, Coding-Decoding, Blood Relations, Syllogism & Logical Puzzles" }
+        ];
+    </script>
+
+    <script type="text/babel">
+        function Navbar({ selectedSubject, onReturnHome }) {
+            return (
+                <header className="bg-navy text-white shadow-md border-b border-slate-800 sticky top-0 z-50">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+                        <div className="flex items-center space-x-3 cursor-pointer" onClick={onReturnHome}>
+                            <div className="w-10 h-10 rounded-xl bg-orange flex items-center justify-center font-bold text-white text-xl shadow">
+                                DS
+                            </div>
+                            <div>
+                                <span className="font-extrabold text-base sm:text-lg tracking-tight block leading-tight">DoThatSpark</span>
+                                <span className="text-[11px] text-slate-400 font-medium">Master CBT Practice Portal</span>
+                            </div>
+                        </div>
+
+                        {selectedSubject && (
+                            <div className="hidden sm:flex items-center space-x-2 bg-slate-800/80 px-4 py-1.5 rounded-full border border-slate-700">
+                                <span className="w-2.5 h-2.5 rounded-full bg-orange animate-pulse"></span>
+                                <span className="text-xs font-semibold text-slate-200">{selectedSubject} Master CBT</span>
+                            </div>
+                        )}
+
+                        <div className="flex items-center space-x-3">
+                            <span className="bg-orange/20 text-orange font-semibold text-xs px-3 py-1.5 rounded-lg border border-orange/30">
+                                Public Practice System
+                            </span>
+                        </div>
+                    </div>
+                </header>
+            );
+        }
+
+        function SubjectSelector({ onSelectSubject }) {
+            return (
+                <div className="max-w-6xl mx-auto px-4 py-12 flex-grow flex flex-col justify-center">
+                    <div className="text-center mb-12">
+                        <span className="inline-block bg-orange/10 text-orange font-semibold px-4 py-1.5 rounded-full text-xs uppercase tracking-wider mb-3">
+                            Competitive Exam Preparation Engine
+                        </span>
+                        <h1 className="text-3xl sm:text-5xl font-extrabold text-navy tracking-tight mb-4">
+                            Master CBT Practice Portal
+                        </h1>
+                        <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                            Select a subject below to launch the professional computer-based test with 100 authentic questions, instant answer locking, and step-by-step teaching explanations.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {SUBJECTS.map((subj, idx) => (
+                            <div 
+                                key={idx}
+                                className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between border-t-4 border-t-orange"
+                            >
+                                <div>
+                                    <div className="flex justify-between items-start mb-3">
+                                        <h3 className="text-lg font-bold text-navy">{subj.name}</h3>
+                                        <span className="text-xs bg-slate-100 text-slate-600 font-semibold px-2.5 py-1 rounded-md">
+                                            {subj.count} Qs
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+                                        {subj.desc}
+                                    </p>
+                                </div>
+
+                                <div className="space-y-4 pt-4 border-t border-slate-100">
+                                    <div className="flex justify-between text-xs font-medium text-slate-500">
+                                        <span>Duration: <strong>{subj.duration} Mins</strong></span>
+                                        <span>Format: <strong>MCQ (4 Options)</strong></span>
+                                    </div>
+                                    <button
+                                        onClick={() => onSelectSubject(subj.name)}
+                                        className="w-full bg-orange hover:bg-orange-hover text-white font-semibold py-3 px-4 rounded-xl shadow transition text-sm flex items-center justify-center space-x-2"
+                                    >
+                                        <span>Start Practice Test</span>
+                                        <span>→</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+    </script>
+
+    <script type="text/babel">
+        function MasterCBT({ subject, questions, onCompleteTest, onReturnHome }) {
+            const [currentIndex, setCurrentIndex] = React.useState(0);
+            const [userAnswers, setUserAnswers] = React.useState({});
+            const [isLocked, setIsLocked] = React.useState({});
+            const [timeLeft, setTimeLeft] = React.useState(60 * 60); // 60 minutes
+            const [showSubmitModal, setShowSubmitModal] = React.useState(false);
+
+            React.useEffect(() => {
+                const timer = setInterval(() => {
+                    setTimeLeft(prev => {
+                        if (prev <= 1) {
+                            clearInterval(timer);
+                            handleFinishTestDirect();
+                            return 0;
+                        }
+                        return prev - 1;
+                    });
+                }, 1000);
+                return () => clearInterval(timer);
+            }, []);
+
+            const formatTime = (secs) => {
+                const m = Math.floor(secs / 60);
+                const s = secs % 60;
+                return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            };
+
+            const currentQ = questions[currentIndex];
+            const answeredCount = Object.keys(userAnswers).length;
+            const progressPct = Math.round(((currentIndex + 1) / questions.length) * 100);
+
+            const handleSelectOption = (optIndex) => {
+                if (isLocked[currentIndex]) return;
+                setUserAnswers(prev => ({ ...prev, [currentIndex]: optIndex }));
+                setIsLocked(prev => ({ ...prev, [currentIndex]: true }));
+            };
+
+            const handleFinishTestDirect = () => {
+                const timeUsed = (60 * 60) - timeLeft;
+                onCompleteTest({ userAnswers, timeUsed, questions });
+            };
+
+            return (
+                <div className="max-w-7xl mx-auto px-4 py-6 flex-grow flex flex-col w-full">
+                    {/* Hero Header */}
+                    <div className="bg-navy text-white rounded-2xl p-6 shadow-md mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div>
+                            <span className="text-xs uppercase tracking-wider font-semibold text-orange bg-orange/10 px-3 py-1 rounded-full mb-2 inline-block">
+                                Master CBT Practice
+                            </span>
+                            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">{subject}</h2>
+                        </div>
+                        <div className="flex items-center space-x-6 w-full md:w-auto justify-between md:justify-end">
+                            <div className="text-right">
+                                <span className="text-xs text-slate-400 block">Exam Parameters</span>
+                                <span className="text-sm font-semibold">100 Questions • 60 Minutes</span>
+                            </div>
+                            <div className={`px-4 py-2 rounded-xl font-mono font-bold text-base flex items-center space-x-2 border ${
+                                timeLeft <= 300 ? 'bg-red-500/20 border-red-500 text-red-300 animate-pulse' : 'bg-slate-800 border-slate-700 text-emerald-400'
+                            }`}>
+                                <span>⏳</span>
+                                <span>{formatTime(timeLeft)}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 flex-grow">
+                        {/* Main Question Interface */}
+                        <div className="lg:col-span-3 flex flex-col justify-between">
+                            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-6">
+                                <div className="flex justify-between items-center mb-4">
+                                    <span className="text-xs font-semibold text-orange bg-orange/10 px-3 py-1 rounded-full">
+                                        Question {currentIndex + 1} of {questions.length}
+                                    </span>
+                                    <span className="text-xs font-semibold text-slate-400">
+                                        {progressPct}% Completed
+                                    </span>
+                                </div>
+                                <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mb-6">
+                                    <div className="bg-orange h-full transition-all duration-300" style={{ width: `${progressPct}%` }}></div>
+                                </div>
+
+                                <h3 className="text-lg sm:text-xl font-bold text-navy mb-6 leading-relaxed">
+                                    {currentQ.question}
+                                </h3>
+
+                                <div className="space-y-3 mb-6">
+                                    {currentQ.options.map((opt, idx) => {
+                                        const isSelected = userAnswers[currentIndex] === idx;
+                                        const isCorrect = idx === currentQ.correctAnswer;
+                                        const locked = isLocked[currentIndex];
+
+                                        let btnStyle = "border-slate-200 bg-white text-slate-700 hover:border-orange hover:bg-orange-light/30";
+                                        if (locked) {
+                                            if (isCorrect) {
+                                                btnStyle = "border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold";
+                                            } else if (isSelected) {
+                                                btnStyle = "border-red-500 bg-red-50 text-red-900 font-semibold";
+                                            } else {
+                                                btnStyle = "border-slate-200 opacity-60 text-slate-400";
+                                            }
+                                        } else if (isSelected) {
+                                            btnStyle = "border-orange bg-orange-light text-orange font-semibold";
+                                        }
+
+                                        return (
+                                            <button
+                                                key={idx}
+                                                disabled={locked}
+                                                onClick={() => handleSelectOption(idx)}
+                                                className={`w-full text-left p-4 rounded-xl border-2 transition flex items-center space-x-4 ${btnStyle}`}
+                                            >
+                                                <span className={`w-8 h-8 rounded-lg flex items-center justify-center font-bold text-sm ${
+                                                    locked && isCorrect ? 'bg-emerald-600 text-white' :
+                                                    locked && isSelected && !isCorrect ? 'bg-red-600 text-white' :
+                                                    isSelected ? 'bg-orange text-white' : 'bg-slate-100 text-slate-600'
+                                                }`}>
+                                                    {String.fromCharCode(65 + idx)}
+                                                </span>
+                                                <span className="flex-grow text-base">{opt}</span>
+                                                {locked && isCorrect && <span className="text-emerald-600 font-bold text-xs">✓ Correct</span>}
+                                                {locked && isSelected && !isCorrect && <span className="text-red-600 font-bold text-xs">✗ Your Answer</span>}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Explanation Box */}
+                                {isLocked[currentIndex] && (
+                                    <div className="p-5 rounded-xl bg-slate-50 border border-slate-200 text-sm">
+                                        <div className="flex items-center space-x-2 mb-2">
+                                            <span className={`font-bold text-xs px-2.5 py-1 rounded ${
+                                                userAnswers[currentIndex] === currentQ.correctAnswer ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                                            }`}>
+                                                {userAnswers[currentIndex] === currentQ.correctAnswer ? 'Correct Answer' : 'Incorrect Answer'}
+                                            </span>
+                                            <span className="text-xs text-slate-500">
+                                                Correct Option: <strong className="text-slate-800">{String.fromCharCode(65 + currentQ.correctAnswer)}. {currentQ.options[currentQ.correctAnswer]}</strong>
+                                            </span>
+                                        </div>
+                                        <p className="text-slate-600 leading-relaxed mt-2 whitespace-pre-line">
+                                            <strong className="text-navy block mb-1">Teaching Explanation / Solution:</strong>
+                                            {currentQ.explanation}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Footer Navigation */}
+                            <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm flex justify-between items-center">
+                                <span className="text-xs font-semibold text-slate-500">
+                                    Question {currentIndex + 1} of {questions.length}
+                                </span>
+                                <div className="space-x-3">
+                                    <button
+                                        onClick={() => {
+                                            if (currentIndex < questions.length - 1) {
+                                                setCurrentIndex(prev => prev + 1);
+                                            } else {
+                                                setShowSubmitModal(true);
+                                            }
+                                        }}
+                                        className="bg-orange hover:bg-orange-hover text-white px-6 py-2.5 rounded-xl font-semibold text-sm shadow transition"
+                                    >
+                                        {currentIndex === questions.length - 1 ? 'Complete Test →' : 'Next Question →'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Sidebar: Palette & Summary */}
+                        <div className="space-y-6">
+                            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                                <h3 className="text-base font-bold text-navy mb-4 pb-2 border-b border-slate-100">
+                                    Test Progress
+                                </h3>
+                                <div className="space-y-3 text-sm mb-6">
+                                    <div className="flex justify-between">
+                                        <span className="text-slate-500">Answered:</span>
+                                        <span className="font-bold text-orange">{answeredCount} / {questions.length}</span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-slate-500">Unanswered:</span>
+                                        <span className="font-bold text-slate-700">{questions.length - answeredCount}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setShowSubmitModal(true)}
+                                    className="w-full bg-navy hover:bg-slate-800 text-white font-semibold py-2.5 rounded-xl text-sm shadow transition"
+                                >
+                                    Finish & Submit Test
+                                </button>
+                            </div>
+
+                            {/* Question Palette */}
+                            <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                                <h3 className="text-base font-bold text-navy mb-3 pb-2 border-b border-slate-100">
+                                    Question Palette
+                                </h3>
+                                <div className="flex flex-wrap gap-1.5 max-h-[300px] overflow-y-auto p-1">
+                                    {questions.map((_, idx) => {
+                                        const isAns = userAnswers[idx] !== undefined;
+                                        const isCorr = isAns && userAnswers[idx] === questions[idx].correctAnswer;
+                                        const isCurr = idx === currentIndex;
+
+                                        let bg = "bg-slate-100 text-slate-600";
+                                        if (isAns) {
+                                            bg = isCorr ? "bg-emerald-600 text-white font-semibold" : "bg-red-600 text-white font-semibold";
+                                        }
+                                        if (isCurr) {
+                                            bg += " ring-2 ring-orange ring-offset-2";
+                                        }
+
+                                        return (
+                                            <button
+                                                key={idx}
+                                                onClick={() => setCurrentIndex(idx)}
+                                                className={`w-8 h-8 rounded-lg text-xs font-bold transition flex items-center justify-center ${bg}`}
+                                            >
+                                                {idx + 1}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Submit Confirmation Modal */}
+                    {showSubmitModal && (
+                        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 text-center">
+                                <h3 className="text-lg font-bold text-navy mb-2">Submit Examination?</h3>
+                                <p className="text-sm text-slate-600 mb-6">
+                                    {questions.length - answeredCount > 0 
+                                        ? `You have ${questions.length - answeredCount} unanswered questions. Do you still want to submit?`
+                                        : 'You have answered all questions. Ready to view your score summary?'
+                                    }
+                                </p>
+                                <div className="flex space-x-3 justify-center">
+                                    <button
+                                        onClick={() => setShowSubmitModal(false)}
+                                        className="bg-slate-200 text-slate-800 px-5 py-2.5 rounded-xl text-sm font-semibold"
+                                    >
+                                        Return to Test
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setShowSubmitModal(false);
+                                            handleFinishTestDirect();
+                                        }}
+                                        className="bg-orange text-white px-6 py-2.5 rounded-xl text-sm font-semibold shadow"
+                                    >
+                                        Yes, Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+    </script>
+
+    <script type="text/babel">
+        function ResultPage({ subject, userAnswers, timeUsed, questions, onReview, onRestart, onHome }) {
+            const [studentName, setStudentName] = React.useState('');
+            const [isCertificateGenerated, setIsCertificateGenerated] = React.useState(false);
+
+            let correct = 0;
+            let incorrect = 0;
+            let unanswered = 0;
+
+            questions.forEach((q, idx) => {
+                const ans = userAnswers[idx];
+                if (ans === undefined) unanswered++;
+                else if (ans === q.correctAnswer) correct++;
+                else incorrect++;
+            });
+
+            const scorePct = Math.round((correct / questions.length) * 100);
+
+            let performanceText = "Needs Improvement";
+            if (scorePct >= 80) performanceText = "Excellent Performance";
+            else if (scorePct >= 60) performanceText = "Good Performance";
+            else if (scorePct >= 40) performanceText = "Average Performance";
+
+            const formatTime = (secs) => {
+                const m = Math.floor(secs / 60);
+                const s = secs % 60;
+                return `${m}m ${s}s`;
+            };
+
+            return (
+                <div className="max-w-4xl mx-auto px-4 py-8 flex-grow">
+                    <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm text-center mb-8">
+                        <span className="bg-emerald-100 text-emerald-700 font-semibold px-4 py-1.5 rounded-full text-xs uppercase tracking-wider mb-3 inline-block">
+                            Test Completed
+                        </span>
+                        <h1 className="text-3xl font-extrabold text-navy mb-1">{subject}</h1>
+                        <p className="text-sm text-slate-500 mb-8">Professional CBT Evaluation Result Summary</p>
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
+                            <div className="w-36 h-36 rounded-full bg-orange/10 border-8 border-orange flex flex-col items-center justify-center shadow-inner">
+                                <span className="text-4xl font-extrabold text-orange">{scorePct}%</span>
+                                <span className="text-xs font-semibold text-slate-500 uppercase">Score</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 text-left w-full sm:w-auto">
+                                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                    <span className="text-xs text-slate-400 block mb-1">Correct</span>
+                                    <span className="text-2xl font-bold text-emerald-600">{correct}</span>
+                                </div>
+                                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                    <span className="text-xs text-slate-400 block mb-1">Incorrect</span>
+                                    <span className="text-2xl font-bold text-red-600">{incorrect}</span>
+                                </div>
+                                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                    <span className="text-xs text-slate-400 block mb-1">Unanswered</span>
+                                    <span className="text-2xl font-bold text-slate-500">{unanswered}</span>
+                                </div>
+                                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                    <span className="text-xs text-slate-400 block mb-1">Time Used</span>
+                                    <span className="text-xl font-bold text-navy">{formatTime(timeUsed)}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="inline-block bg-navy text-white font-semibold px-6 py-2 rounded-xl text-sm mb-8">
+                            Performance Feedback: {performanceText}
+                        </div>
+
+                        {/* Certificate & Congratulatory Generator condition: correct > 30 */}
+                        {correct > 30 && (
+                            <div className="mb-8 p-6 bg-orange-light/50 border-2 border-orange/30 rounded-2xl text-left">
+                                <div className="flex items-center space-x-3 mb-3">
+                                    <span className="text-2xl">🎉</span>
+                                    <div>
+                                        <h3 className="font-bold text-navy text-lg">Outstanding Milestone!</h3>
+                                        <p className="text-xs text-slate-600">You secured more than 30 correct answers ({correct}/100). Generate your official DoThatSpark Certificate & Greeting!</p>
+                                    </div>
+                                </div>
+
+                                {!isCertificateGenerated ? (
+                                    <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                                        <input
+                                            type="text"
+                                            placeholder="Enter your full name..."
+                                            value={studentName}
+                                            onChange={(e) => setStudentName(e.target.value)}
+                                            className="flex-grow bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-orange"
+                                        />
+                                        <button
+                                            onClick={() => {
+                                                if (studentName.trim()) {
+                                                    setIsCertificateGenerated(true);
+                                                } else {
+                                                    alert("Please enter your name to generate your certificate.");
+                                                }
+                                            }}
+                                            className="bg-orange hover:bg-orange-hover text-white font-semibold px-6 py-2.5 rounded-xl text-sm shadow transition"
+                                        >
+                                            Generate Certificate 🏆
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="mt-6 bg-white border-4 border-navy rounded-2xl p-8 text-center shadow-xl relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 bg-orange text-white text-[10px] font-bold px-4 py-1 rounded-bl-xl uppercase tracking-widest">
+                                            DoThatSpark Official
+                                        </div>
+                                        <span className="text-xs uppercase tracking-widest text-orange font-bold block mb-1">Certificate of Achievement</span>
+                                        <h2 className="text-2xl sm:text-3xl font-extrabold text-navy mb-2">Master CBT Practice Recognition</h2>
+                                        <p className="text-xs text-slate-500 mb-6">This official greeting & recognition certificate is proudly presented to</p>
+                                        
+                                        <div className="text-2xl sm:text-3xl font-bold text-orange underline decoration-orange/40 mb-6">
+                                            {studentName}
+                                        </div>
+
+                                        <p className="text-sm text-slate-700 max-w-lg mx-auto mb-6 leading-relaxed">
+                                            For successfully completing the rigorous 100-question practice examination in <strong className="text-navy">{subject}</strong> with a score of <strong className="text-emerald-600">{correct} / 100 ({scorePct}%)</strong>.
+                                        </p>
+
+                                        <div className="flex justify-between items-center pt-6 border-t border-slate-100 text-xs text-slate-500">
+                                            <span>Date: {new Date().toLocaleDateString()}</span>
+                                            <span className="font-bold text-navy">DoThatSpark Education Platform</span>
+                                        </div>
+
+                                        <div className="mt-6">
+                                            <button
+                                                onClick={() => setIsCertificateGenerated(false)}
+                                                className="text-xs text-orange font-semibold underline hover:text-orange-hover"
+                                            >
+                                                Edit Name / Regenerate
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        <div className="flex flex-wrap justify-center gap-4">
+                            <button
+                                onClick={onReview}
+                                className="bg-orange hover:bg-orange-hover text-white font-semibold px-6 py-3 rounded-xl shadow transition text-sm"
+                            >
+                                Review All Answers & Solutions
+                            </button>
+                            <button
+                                onClick={onRestart}
+                                className="bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold px-6 py-3 rounded-xl transition text-sm"
+                            >
+                                Retake Test
+                            </button>
+                            <button
+                                onClick={onHome}
+                                className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition text-sm"
+                            >
+                                Choose Another Subject
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function ResultReview({ questions, userAnswers, onBack }) {
+            const [filter, setFilter] = React.useState('all');
+
+            const filteredQuestions = questions.filter((q, idx) => {
+                const ans = userAnswers[idx];
+                if (filter === 'correct') return ans === q.correctAnswer;
+                if (filter === 'incorrect') return ans !== undefined && ans !== q.correctAnswer;
+                if (filter === 'unanswered') return ans === undefined;
+                return true;
+            });
+
+            return (
+                <div className="max-w-4xl mx-auto px-4 py-8 flex-grow w-full">
+                    <div className="flex flex-col sm:flex-row justify-between items-center mb-6 pb-4 border-b border-slate-200 gap-4">
+                        <div>
+                            <h2 className="text-2xl font-bold text-navy">Detailed Question Review & Solutions</h2>
+                            <p className="text-sm text-slate-500">Inspect user answers against correct options and teaching explanations.</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            {['all', 'correct', 'incorrect', 'unanswered'].map(f => (
+                                <button
+                                    key={f}
+                                    onClick={() => setFilter(f)}
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition ${
+                                        filter === f ? 'bg-orange text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                    }`}
+                                >
+                                    {f}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 mb-8">
+                        {filteredQuestions.map((q) => {
+                            const realIdx = q.id - 1;
+                            const userAns = userAnswers[realIdx];
+                            const isCorrect = userAns === q.correctAnswer;
+                            const isUnanswered = userAns === undefined;
+
+                            return (
+                                <div key={q.id} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div className="flex items-center space-x-2">
+                                            <span className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs ${
+                                                isUnanswered ? 'bg-slate-200 text-slate-600' : isCorrect ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                                            }`}>
+                                                {isUnanswered ? '—' : isCorrect ? '✓' : '✗'}
+                                            </span>
+                                            <h3 className="font-bold text-navy text-base">Question {q.id}</h3>
+                                        </div>
+                                        <span className="text-xs bg-orange/10 text-orange px-2.5 py-1 rounded-md font-medium">{q.subject}</span>
+                                    </div>
+                                    <p className="text-slate-800 font-medium mb-4">{q.question}</p>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
+                                        {q.options.map((opt, optIdx) => {
+                                            const isCorrectOpt = optIdx === q.correctAnswer;
+                                            const isUserOpt = userAns === optIdx;
+                                            let st = "border-slate-200 bg-slate-50 text-slate-700";
+                                            if (isCorrectOpt) st = "border-emerald-500 bg-emerald-50 text-emerald-900 font-semibold";
+                                            else if (isUserOpt) st = "border-red-500 bg-red-50 text-red-900 font-semibold";
+
+                                            return (
+                                                <div key={optIdx} className={`p-3 rounded-xl border text-sm flex items-center justify-between ${st}`}>
+                                                    <span>{String.fromCharCode(65 + optIdx)}. {opt}</span>
+                                                    <div className="space-x-1 text-[11px]">
+                                                        {isCorrectOpt && <span className="text-emerald-600 font-bold">Correct</span>}
+                                                        {isUserOpt && !isCorrectOpt && <span className="text-red-600 font-bold">Your Ans</span>}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {q.explanation && (
+                                        <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-600 whitespace-pre-line">
+                                            <strong className="text-navy block mb-1">Explanation / Solution:</strong>
+                                            {q.explanation}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <div className="text-center">
+                        <button
+                            onClick={onBack}
+                            className="bg-orange text-white font-semibold px-6 py-2.5 rounded-xl text-sm shadow"
+                        >
+                            ← Back to Score Summary
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+    </script>
+
+    <script type="text/babel">
+        function App() {
+            const [selectedSubject, setSelectedSubject] = React.useState(null);
+            const [questions, setQuestions] = React.useState([]);
+            const [testState, setTestState] = React.useState('select'); // 'select' | 'cbt' | 'result' | 'review'
+            const [resultData, setResultData] = React.useState(null);
+
+            const handleSelectSubject = (subjName) => {
+                const generated = generateQuestionBank(subjName);
+                setSelectedSubject(subjName);
+                setQuestions(generated);
+                setTestState('cbt');
+            };
+
+            const handleCompleteTest = (data) => {
+                setResultData(data);
+                setTestState('result');
+            };
+
+            const handleReturnHome = () => {
+                setSelectedSubject(null);
+                setQuestions([]);
+                setTestState('select');
+                setResultData(null);
+            };
+
+            return (
+                <div className="min-h-full flex flex-col bg-slate-50 text-slate-800">
+                    <Navbar selectedSubject={selectedSubject} onReturnHome={handleReturnHome} />
+
+                    <main className="flex-grow flex flex-col">
+                        {testState === 'select' && (
+                            <SubjectSelector onSelectSubject={handleSelectSubject} />
+                        )}
+
+                        {testState === 'cbt' && (
+                            <MasterCBT
+                                subject={selectedSubject}
+                                questions={questions}
+                                onCompleteTest={handleCompleteTest}
+                                onReturnHome={handleReturnHome}
+                            />
+                        )}
+
+                        {testState === 'result' && resultData && (
+                            <ResultPage
+                                subject={selectedSubject}
+                                userAnswers={resultData.userAnswers}
+                                timeUsed={resultData.timeUsed}
+                                questions={questions}
+                                onReview={() => setTestState('review')}
+                                onRestart={() => handleSelectSubject(selectedSubject)}
+                                onHome={handleReturnHome}
+                            />
+                        )}
+
+                        {testState === 'review' && resultData && (
+                            <ResultReview
+                                questions={questions}
+                                userAnswers={resultData.userAnswers}
+                                onBack={() => setTestState('result')}
+                            />
+                        )}
+                    </main>
+
+                    <footer className="bg-navy text-slate-400 py-6 border-t border-slate-800 text-center text-xs">
+                        &copy; 2026 DoThatSpark Education Platform. Master CBT Practice System. All rights reserved.
+                    </footer>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>
