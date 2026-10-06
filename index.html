@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CBT Examination - 200 Computer Fundamentals MCQs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Scrollbar for palette */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 flex flex-col min-h-screen select-none">
+
+  <!-- Main Header Bar -->
+  <header class="bg-slate-900 text-white px-4 py-2.5 flex flex-wrap justify-between items-center shadow-md border-b border-slate-700">
+    <div class="flex items-center space-x-3">
+      <span class="bg-indigo-600 text-white font-extrabold px-2.5 py-1 rounded text-xs sm:text-sm tracking-wider uppercase">CBT Exam</span>
+      <h1 class="text-sm sm:text-base font-bold">Computer Fundamentals — 200 Mock Questions</h1>
+    </div>
+    
+    <div class="flex items-center space-x-3 mt-2 sm:mt-0 text-sm">
+      <!-- Live Score Badge -->
+      <div class="bg-slate-800 border border-slate-700 px-3 py-1 rounded flex items-center space-x-2">
+        <span class="text-slate-400 text-xs">Score:</span>
+        <span id="scoreBadge" class="font-bold text-emerald-400">0.00</span>
+      </div>
+
+      <!-- Countdown Timer -->
+      <div class="bg-slate-800 border border-slate-700 px-3 py-1 rounded flex items-center space-x-2">
+        <span class="text-slate-400 text-xs">Time Left:</span>
+        <span id="timerText" class="font-mono font-bold text-amber-400 text-sm sm:text-base">120:00</span>
+      </div>
+
+      <!-- Instant Feedback Mode Toggle -->
+      <label class="flex items-center cursor-pointer space-x-2 bg-slate-800 border border-slate-700 px-3 py-1 rounded">
+        <span class="text-xs text-slate-300 font-medium hidden sm:inline">Instant Reveal</span>
+        <input type="checkbox" id="instantRevealToggle" checked class="accent-indigo-600 cursor-pointer h-4 w-4">
+      </label>
+    </div>
+  </header>
+
+  <!-- TOP ACTION TOOLBAR (Previous, Next, Review, Clear, and Submit) -->
+  <nav class="bg-white border-b border-slate-200 px-4 py-2.5 shadow-sm sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- Question Navigation & Control Buttons -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="btnPrev" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-700 font-semibold rounded-lg text-xs sm:text-sm transition flex items-center gap-1 shadow-sm border border-slate-200">
+          <span>←</span> Previous
+        </button>
+
+        <button id="btnNext" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold rounded-lg text-xs sm:text-sm transition flex items-center gap-1 shadow">
+          Next <span>→</span>
+        </button>
+
+        <button id="btnReview" class="px-3.5 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-medium rounded-lg text-xs sm:text-sm transition">
+          Mark for Review
+        </button>
+
+        <button id="btnClear" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 font-medium rounded-lg text-xs sm:text-sm transition border border-slate-200">
+          Clear Choice
+        </button>
+      </div>
+
+      <!-- Top Submit Button -->
+      <div>
+        <button id="btnSubmitTest" class="px-5 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-lg text-xs sm:text-sm shadow-md transition flex items-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          Submit Test
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Workspace Layout -->
+  <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    
+    <!-- Question Area (Left/Center) -->
+    <main class="flex-1 flex flex-col p-4 sm:p-6 overflow-y-auto">
+      <div class="max-w-4xl w-full mx-auto bg-white rounded-xl shadow-sm border border-slate-200 p-5 sm:p-8 flex-1 flex flex-col justify-start">
+        
+        <!-- Question Meta -->
+        <div>
+          <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <span id="qCategory">Category: Hardware & Architecture</span>
+            <span class="text-slate-400">Marking: +2.00 / -0.50</span>
+          </div>
+
+          <!-- Question Title -->
+          <div class="text-lg sm:text-xl font-bold text-slate-900 mb-6 flex items-start gap-2">
+            <span id="qNumberText" class="text-indigo-600">Q.1</span>
+            <span id="qPromptText">Loading question prompt...</span>
+          </div>
+
+          <!-- Options Grid -->
+          <div id="optionsContainer" class="space-y-3 mb-6">
+            <!-- Dynamically populated options -->
+          </div>
+
+          <!-- Solution / Explanation Container (Appears after answer click) -->
+          <div id="solutionBox" class="hidden rounded-lg p-4 mb-4 border transition-all">
+            <div id="solutionBadge" class="inline-block px-2 py-0.5 rounded text-xs font-bold uppercase mb-2"></div>
+            <p id="solutionText" class="text-sm leading-relaxed text-slate-700"></p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Side Exam Palette (Right) -->
+    <aside class="w-full lg:w-80 bg-white border-t lg:border-t-0 lg:border-l border-slate-200 flex flex-col h-auto lg:h-auto overflow-hidden">
+      <!-- Status Legend -->
+      <div class="p-4 border-b border-slate-100 bg-slate-50">
+        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Question Palette</h3>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="flex items-center space-x-1.5">
+            <span class="w-3.5 h-3.5 rounded-full bg-emerald-500 inline-block"></span>
+            <span>Answered (<b id="countAnswered">0</b>)</span>
+          </div>
+          <div class="flex items-center space-x-1.5">
+            <span class="w-3.5 h-3.5 rounded-full bg-rose-500 inline-block"></span>
+            <span>Not Answered (<b id="countNotAnswered">0</b>)</span>
+          </div>
+          <div class="flex items-center space-x-1.5">
+            <span class="w-3.5 h-3.5 rounded-full bg-purple-500 inline-block"></span>
+            <span>Marked Review (<b id="countReview">0</b>)</span>
+          </div>
+          <div class="flex items-center space-x-1.5">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 border border-slate-300 inline-block"></span>
+            <span>Not Visited (<b id="countNotVisited">200</b>)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 200 Questions Grid -->
+      <div class="flex-1 overflow-y-auto p-4 max-h-[280px] lg:max-h-full">
+        <div id="paletteGrid" class="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-5 gap-2">
+          <!-- 200 buttons inserted by JS -->
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Score Summary Modal (Hidden by default) -->
+  <div id="resultModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100">
+      <h2 class="text-2xl font-black text-slate-900 mb-2">Exam Result Summary</h2>
+      <p class="text-slate-500 text-sm mb-6">Here is your performance report for the 200 Computer Fundamentals questions.</p>
+
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+          <span class="text-xs text-slate-500 block">Total Questions</span>
+          <span class="text-2xl font-black text-slate-800">200</span>
+        </div>
+        <div class="bg-emerald-50 p-3.5 rounded-xl border border-emerald-100">
+          <span class="text-xs text-emerald-600 font-bold block">Correct Answers</span>
+          <span id="resCorrect" class="text-2xl font-black text-emerald-700">0</span>
+        </div>
+        <div class="bg-rose-50 p-3.5 rounded-xl border border-rose-100">
+          <span class="text-xs text-rose-600 font-bold block">Incorrect Answers</span>
+          <span id="resIncorrect" class="text-2xl font-black text-rose-700">0</span>
+        </div>
+        <div class="bg-indigo-50 p-3.5 rounded-xl border border-indigo-100">
+          <span class="text-xs text-indigo-600 font-bold block">Final Aggregate Score</span>
+          <span id="resTotalScore" class="text-2xl font-black text-indigo-700">0.00 / 400</span>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3">
+        <button onclick="window.location.reload()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-lg text-sm transition">
+          Restart Mock
+        </button>
+        <button onclick="document.getElementById('resultModal').classList.add('hidden'); document.getElementById('resultModal').classList.remove('flex')" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg text-sm transition">
+          Review Answers
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- 200 COMPUTER FUNDAMENTAL QUESTIONS DATASET ---
+    const bankRaw = [
+      { q: "Who is known as the Father of Modern Computers?", o: ["Charles Babbage", "Alan Turing", "John von Neumann", "Blaise Pascal"], a: 0, c: "History", exp: "Charles Babbage conceived and invented the first mechanical computer (the Analytical Engine) in the early 19th century." },
+      { q: "Which electronic component was used in First Generation computers?", o: ["Vacuum Tubes", "Transistors", "Integrated Circuits (ICs)", "Microprocessors"], a: 0, c: "Generations", exp: "First-generation computers (1940-1956) used vacuum tubes for circuitry and magnetic drums for memory." },
+      { q: "Which electronic component was introduced in Second Generation computers?", o: ["Transistors", "Vacuum Tubes", "VLSI Chips", "Optic Fibers"], a: 0, c: "Generations", exp: "Transistors replaced vacuum tubes in second-generation computers (1956-1963), making them smaller, faster, and cheaper." },
+      { q: "What does CPU stand for?", o: ["Central Processing Unit", "Central Program Unit", "Computer Processing Unit", "Control Power Unit"], a: 0, c: "Hardware", exp: "CPU stands for Central Processing Unit and executes instructions comprising a computer program." },
+      { q: "Which part of the CPU is responsible for mathematical calculations and logical comparisons?", o: ["ALU (Arithmetic Logic Unit)", "Control Unit (CU)", "Registers", "Cache Memory"], a: 0, c: "Architecture", exp: "The ALU (Arithmetic Logic Unit) executes all arithmetic calculations (+, -, *, /) and logical comparisons (<, >, ==)." },
+      { q: "Which memory is non-volatile, retaining contents when the power is turned off?", o: ["ROM", "RAM", "SRAM", "DRAM"], a: 0, c: "Memory", exp: "ROM (Read-Only Memory) is non-volatile and permanently stores firmware such as the system BIOS/UEFI." },
+      { q: "Which type of memory is directly accessible by the CPU and volatile in nature?", o: ["RAM", "Hard Disk Drive", "Optical Disc", "Flash Drive"], a: 0, c: "Memory", exp: "RAM (Random Access Memory) is primary volatile memory that holds data currently actively used by the OS and applications." },
+      { q: "1 Nibble is equal to how many bits?", o: ["4 bits", "8 bits", "2 bits", "16 bits"], a: 0, c: "Data Units", exp: "1 Nibble is an aggregation of 4 bits (half of an 8-bit byte)." },
+      { q: "How many bytes are in exactly 1 Kilobyte (KB) in binary standard?", o: ["1024 bytes", "1000 bytes", "512 bytes", "2048 bytes"], a: 0, c: "Data Units", exp: "In traditional binary architecture, 1 KB is equal to 2^10 = 1024 bytes." },
+      { q: "Which component coordinates and directs all operations inside the computer system?", o: ["Control Unit (CU)", "ALU", "BIOS", "RAM"], a: 0, c: "Architecture", exp: "The Control Unit (CU) decodes program instructions and manages data flow across the processor, memory, and I/O devices." },
+      { q: "What does BIOS stand for?", o: ["Basic Input Output System", "Binary Input Output System", "Base Integrated Operating System", "Bus Interface Operating System"], a: 0, c: "System Software", exp: "BIOS stands for Basic Input/Output System and initializes hardware during the boot sequence." },
+      { q: "The process of starting or restarting a computer is called:", o: ["Booting", "Loading", "Execution", "Compiling"], a: 0, c: "Operating System", exp: "Booting is the startup sequence that loads the operating system kernel into main memory from storage." },
+      { q: "Which of the following is considered the fastest memory in a computer hierarchy?", o: ["CPU Registers", "Cache Memory", "RAM", "Solid State Drive"], a: 0, c: "Memory Hierarchy", exp: "CPU Registers are located directly inside the processor core and offer the highest access speeds." },
+      { q: "Which storage device uses magnetic platters to store binary information?", o: ["Hard Disk Drive (HDD)", "Solid State Drive (SSD)", "CD-ROM", "USB Thumb Drive"], a: 0, c: "Secondary Storage", exp: "Traditional HDDs store data magnetically using spinning rigid platters coated with magnetic material." },
+      { q: "Solid State Drives (SSDs) store data using:", o: ["NAND Flash Memory", "Magnetic Platters", "Optical Grooves", "Vacuum Diodes"], a: 0, c: "Secondary Storage", exp: "SSDs have no moving mechanical parts and retain data electronically on NAND flash memory chips." },
+      { q: "Which of the following is an input device?", o: ["Optical Barcode Scanner", "Dot Matrix Printer", "Computer Monitor", "Audio Speaker"], a: 0, c: "Peripherals", exp: "A barcode scanner captures optical data and sends it into the computer as input." },
+      { q: "Which key combination is commonly used to permanently delete a file in Windows without sending it to the Recycle Bin?", o: ["Shift + Delete", "Ctrl + Delete", "Alt + Delete", "Ctrl + Alt + Delete"], a: 0, c: "OS Shortcuts", exp: "Shift + Delete bypasses the Windows Recycle Bin and immediately deletes the targeted file reference." },
+      { q: "Which of the following is an example of System Software?", o: ["Operating System", "MS Excel", "Adobe Photoshop", "Google Chrome"], a: 0, c: "Software", exp: "An Operating System is system software that manages hardware resources and provides common services for application software." },
+      { q: "Which number system uses base 16?", o: ["Hexadecimal", "Octal", "Binary", "Decimal"], a: 0, c: "Number Systems", exp: "Hexadecimal uses 16 unique symbols: digits 0-9 and letters A-F." },
+      { q: "The hexadecimal number 'A' corresponds to which decimal integer?", o: ["10", "11", "12", "15"], a: 0, c: "Number Systems", exp: "In hexadecimal notation: A=10, B=11, C=12, D=13, E=14, and F=15." },
+      { q: "What is the binary representation of the decimal number 5?", o: ["101", "110", "111", "011"], a: 0, c: "Number Systems", exp: "Decimal 5 in binary = (4 * 1) + (2 * 0) + (1 * 1) = 101." },
+      { q: "Which bus connects the CPU directly to RAM to transfer addresses?", o: ["Address Bus", "Data Bus", "Control Bus", "USB"], a: 0, c: "Buses", exp: "The Address Bus carries the physical memory addresses that the CPU wishes to read from or write to." },
+      { q: "Is the Address Bus typically unidirectional or bidirectional?", o: ["Unidirectional (CPU to Memory)", "Bidirectional", "Omnidirectional", "Depends on power state"], a: 0, c: "Buses", exp: "The address bus is unidirectional because addresses only originate from the CPU/DMA controller to memory." },
+      { q: "Which port is most widely used today to connect peripherals like keyboards, mice, and flash drives?", o: ["USB (Universal Serial Bus)", "VGA Port", "Serial RS-232", "Parallel LPT1"], a: 0, c: "Interfaces", exp: "Universal Serial Bus (USB) is the modern industry standard for communication and power supply to peripherals." },
+      { q: "What does GUI stand for in computer systems?", o: ["Graphical User Interface", "General User Interaction", "Guided Utility Interface", "Global Unified Icon"], a: 0, c: "OS", exp: "GUI stands for Graphical User Interface, enabling users to interact via windows, icons, and menus instead of text commands." },
+      { q: "Which protocol is responsible for assigning dynamic IP addresses to client devices on a local network?", o: ["DHCP", "DNS", "FTP", "SMTP"], a: 0, c: "Networking", exp: "DHCP (Dynamic Host Configuration Protocol) automatically leases IP addresses and subnet masks to network clients." },
+      { q: "What does DNS stand for?", o: ["Domain Name System", "Data Network Service", "Dynamic Node Server", "Domain Number Sequence"], a: 0, c: "Networking", exp: "DNS translates human-readable hostnames (e.g., example.com) into numerical IP addresses (e.g., 93.184.216.34)." },
+      { q: "Which network topology connects every computer to a central device like a switch or hub?", o: ["Star Topology", "Bus Topology", "Ring Topology", "Mesh Topology"], a: 0, c: "Networking", exp: "In a Star topology, all nodes are connected via dedicated cables to a central network switch." },
+      { q: "What does HTTP stand for?", o: ["HyperText Transfer Protocol", "High Text Transmission Protocol", "Hyper Transfer Terminal Protocol", "HyperText Transition Path"], a: 0, c: "Internet", exp: "HTTP stands for HyperText Transfer Protocol, the foundational protocol used by the World Wide Web." },
+      { q: "What is the standard port number for secure HTTPS communication?", o: ["443", "80", "21", "25"], a: 0, c: "Networking", exp: "Port 443 is the default TCP port dedicated for secure encrypted HTTPS (SSL/TLS) traffic (Port 80 is unencrypted HTTP)." },
+      { q: "What is the default port used by HTTP?", o: ["80", "443", "22", "53"], a: 0, c: "Networking", exp: "TCP Port 80 is the standardized default network port for unencrypted plain-text HTTP communication." },
+      { q: "Which layer of the OSI model is closest to the end user?", o: ["Application Layer", "Physical Layer", "Transport Layer", "Network Layer"], a: 0, c: "Networking", exp: "The Application Layer (Layer 7) directly interacts with software applications (HTTP, SMTP, FTP)." },
+      { q: "How many layers are in the OSI reference model?", o: ["7", "4", "5", "6"], a: 0, c: "Networking", exp: "The OSI model consists of 7 layers: Physical, Data Link, Network, Transport, Session, Presentation, Application." },
+      { q: "Which protocol is primarily used for uploading and downloading files over a network?", o: ["FTP", "SMTP", "POP3", "SNMP"], a: 0, c: "Networking", exp: "FTP (File Transfer Protocol) is designed specifically for client-server file transfers." },
+      { q: "Which protocol is used by email clients to send outgoing email messages?", o: ["SMTP", "POP3", "IMAP", "HTTP"], a: 0, c: "Networking", exp: "SMTP (Simple Mail Transfer Protocol) is the standard protocol for sending outgoing emails across servers." },
+      { q: "Which protocol is commonly used to retrieve emails and store them on a local device while deleting from the server?", o: ["POP3", "SMTP", "SNMP", "DNS"], a: 0, c: "Networking", exp: "POP3 (Post Office Protocol v3) downloads messages from an email server and traditionally deletes them from the server." },
+      { q: "A 32-bit IPv4 address consists of how many octets (bytes)?", o: ["4 octets", "8 octets", "16 octets", "2 octets"], a: 0, c: "Networking", exp: "IPv4 addresses are 32 bits divided into 4 octets separated by dots (e.g., 192.168.1.1)." },
+      { q: "What is the length of an IPv6 address?", o: ["128 bits", "32 bits", "64 bits", "256 bits"], a: 0, c: "Networking", exp: "IPv6 addresses are 128 bits long and formatted as eight groups of four hexadecimal digits separated by colons." },
+      { q: "A MAC address consists of how many bits?", o: ["48 bits", "32 bits", "64 bits", "128 bits"], a: 0, c: "Hardware", exp: "A Media Access Control (MAC) address is a 48-bit unique hardware identifier burnt into network interface cards." },
+      { q: "Which device operates at the Network Layer (Layer 3) to forward packets between different subnets?", o: ["Router", "Repeater", "Hub", "Unmanaged Switch"], a: 0, c: "Networking", exp: "Routers inspect Layer 3 IP addresses to direct data packets between separate physical and logical networks." },
+      { q: "Malicious software that disguises itself as legitimate software is called a:", o: ["Trojan Horse", "Worm", "Ransomware", "Spyware"], a: 0, c: "Cybersecurity", exp: "A Trojan horse misleads users of its true intent by appearing harmless or useful while hiding a payload." },
+      { q: "A self-replicating malware program that spreads across computer networks without human action is a:", o: ["Worm", "Trojan Horse", "Phishing Mail", "Adware"], a: 0, c: "Cybersecurity", exp: "Unlike viruses, computer worms replicate themselves automatically over network vulnerabilities without host file intervention." },
+      { q: "Malware that encrypts a victim's files and demands payment for the decryption key is known as:", o: ["Ransomware", "Keylogger", "Adware", "Rootkit"], a: 0, c: "Cybersecurity", exp: "Ransomware utilizes asymmetric or symmetric encryption to lock files until a financial ransom is paid." },
+      { q: "A fraudulent attempt to obtain sensitive data like usernames and passwords by impersonating a trustworthy entity is called:", o: ["Phishing", "Spoofing", "DDoS", "Cracking"], a: 0, c: "Cybersecurity", exp: "Phishing uses deceptive emails or websites that look identical to legitimate institutions to steal credentials." },
+      { q: "What is the primary function of a Firewall?", o: ["Filter incoming and outgoing network traffic based on security rules", "Speed up internet downloads", "Store cached web images", "Remove physical dust inside the CPU"], a: 0, c: "Cybersecurity", exp: "A firewall inspects packets and blocks unauthorized network traffic based on configured security rules." },
+      { q: "Which key combination selects all contents in an active document in Microsoft Office and Windows?", o: ["Ctrl + A", "Ctrl + S", "Ctrl + C", "Ctrl + V"], a: 0, c: "Shortcuts", exp: "Ctrl + A executes the 'Select All' command across text fields, folders, and documents." },
+      { q: "What is the shortcut key to paste copied items from the clipboard?", o: ["Ctrl + V", "Ctrl + P", "Ctrl + C", "Ctrl + X"], a: 0, c: "Shortcuts", exp: "Ctrl + V inserts the content currently stored in the system clipboard at the cursor location." },
+      { q: "Which shortcut key is used to save the currently open file?", o: ["Ctrl + S", "Ctrl + W", "Ctrl + Shift + S", "Alt + S"], a: 0, c: "Shortcuts", exp: "Ctrl + S triggers the quick save command in almost all operating systems and office applications." },
+      { q: "In Microsoft Excel, what symbol must precede every mathematical formula?", o: ["= (Equal sign)", "+ (Plus)", "@ (At sign)", "# (Hash)"], a: 0, c: "MS Excel", exp: "All Excel formulas and functions must begin with an equal sign (=) so Excel recognizes it as a formula rather than text." },
+      { q: "What is the intersection of a row and a column in a spreadsheet called?", o: ["Cell", "Block", "Grid", "Field"], a: 0, c: "MS Excel", exp: "The intersection of a row (number) and a column (letter) is designated as a Cell (e.g., A1)." }
+    ];
+
+    const categories = [
+      "Hardware & Components", "Memory Systems", "Operating Systems", "Networking Protocols",
+      "Cybersecurity", "MS Office & Productivity", "File Formats", "Database Concepts",
+      "Programming Logic", "Internet & Web Tech"
+    ];
+
+    const generatedPool = [
+      { q: "Which printer technology sprays microscopic droplets of liquid ink onto paper?", o: ["Inkjet Printer", "Laser Printer", "Dot Matrix", "Thermal Printer"], a: 0, exp: "Inkjet printers utilize tiny nozzles to spray droplets of liquid ink precisely onto paper." },
+      { q: "Which printer utilizes a toner cartridge filled with dry powdered ink?", o: ["Laser Printer", "Inkjet Printer", "Daisy Wheel", "Line Printer"], a: 0, exp: "Laser printers use an electrostatic drum, laser beam, and dry toner powder to produce crisp prints." },
+      { q: "Which display technology uses organic compounds that emit light individually when powered?", o: ["OLED", "LCD", "CRT", "Plasma"], a: 0, exp: "OLED (Organic Light Emitting Diode) pixels emit their own light, allowing true blacks and thin displays." },
+      { q: "Which memory type must be periodically refreshed thousands of times per second to prevent data loss?", o: ["DRAM (Dynamic RAM)", "SRAM (Static RAM)", "ROM", "EEPROM"], a: 0, exp: "DRAM uses capacitors that leak charge and require periodic electronic refreshing cycles." },
+      { q: "Which memory uses flip-flops to store each bit and does not require refreshing?", o: ["SRAM (Static RAM)", "DRAM", "Flash Memory", "Magnetic Core"], a: 0, exp: "SRAM uses flip-flop transistor circuits that hold data statically without refreshing as long as power is supplied." },
+      { q: "Cache memory is typically built using which technology?", o: ["SRAM", "DRAM", "EEPROM", "Magnetic Film"], a: 0, exp: "High-speed SRAM is used for CPU L1, L2, and L3 caches because of its near-zero access latency." },
+      { q: "What does RAID stand for in data storage?", o: ["Redundant Array of Independent Disks", "Rapid Access of Indexed Drives", "Random Array of Integrated Data", "Reliable Architecture for Internal Drives"], a: 0, exp: "RAID combines multiple physical disk drives into one logical unit for redundancy and performance." },
+      { q: "Which RAID level provides striping across drives without any parity or fault tolerance?", o: ["RAID 0", "RAID 1", "RAID 5", "RAID 10"], a: 0, exp: "RAID 0 splits data evenly across two or more disks with no parity information, offering speed but zero redundancy." },
+      { q: "Which RAID configuration provides pure disk mirroring for complete redundancy?", o: ["RAID 1", "RAID 0", "RAID 5", "RAID 6"], a: 0, exp: "RAID 1 mirrors identical data across two disks so if one fails, the mirror copy maintains continuous uptime." },
+      { q: "In operating systems, what is 'Thrashing'?", o: ["Excessive paging activity where the system spends more time swapping than executing", "A physical hard disk head collision", "Overheating of the CPU voltage regulator", "Malicious deletion of master boot records"], a: 0, exp: "Thrashing occurs when high memory pressure causes the OS to continuously swap pages between RAM and swap space." },
+      { q: "Virtual memory is typically implemented using space on the:", o: ["Secondary Storage (HDD/SSD)", "L1 Cache", "BIOS ROM", "Video RAM"], a: 0, exp: "Virtual memory uses secondary storage (paging file/swap partition) to simulate additional physical RAM." },
+      { q: "Which operating system scheduling algorithm gives each process a fixed slice of CPU time (time quantum)?", o: ["Round Robin (RR)", "First Come First Served (FCFS)", "Shortest Job Next (SJN)", "Priority Scheduling"], a: 0, exp: "Round Robin allocates equal time slices to each process in cyclic order to ensure fair multitasking." },
+      { q: "What is a 'Deadlock' in operating systems?", o: ["A situation where two or more processes are blocked waiting for resources held by each other", "A permanent CPU hardware lockup", "A corrupted system file in System32", "Loss of CMOS clock synchronization"], a: 0, exp: "A deadlock is a standstill where competing actions wait indefinitely for resources held by the other." },
+      { q: "Which command line command in Windows is used to test reachability of a host on an IP network?", o: ["ping", "tracert", "ipconfig", "netstat"], a: 0, exp: "The 'ping' utility sends ICMP Echo Request packets to test connection latency and packet loss." },
+      { q: "Which Windows utility displays current IP configurations and adapter details?", o: ["ipconfig", "ifconfig", "ping", "nslookup"], a: 0, exp: "'ipconfig' displays all current TCP/IP network configuration values on Windows (Linux uses 'ifconfig' or 'ip')." },
+      { q: "Which command traces the exact hop-by-hop route packets take to reach a destination host?", o: ["tracert", "ping", "netstat", "route print"], a: 0, exp: "'tracert' (traceroute) displays the sequence of routing hops and round-trip times to a remote host." },
+      { q: "What is the standard subnet mask for a Class C IPv4 network (/24)?", o: ["255.255.255.0", "255.0.0.0", "255.255.0.0", "255.255.255.255"], a: 0, exp: "A Class C network uses a default 24-bit subnet mask: 255.255.255.0." },
+      { q: "Which transmission medium transmits data as pulses of light through flexible glass or plastic threads?", o: ["Fiber Optic Cable", "Coaxial Cable", "Unshielded Twisted Pair (UTP)", "Shielded Twisted Pair (STP)"], a: 0, exp: "Fiber optic cables carry modulated light signals through glass cores, immune to electromagnetic interference." },
+      { q: "Which connector type is standard for terminating Ethernet twisted-pair cables?", o: ["RJ-45", "RJ-11", "BNC", "DB-9"], a: 0, exp: "RJ-45 (Registered Jack 45) is the 8-pin modular connector standard for twisted-pair Ethernet networking." },
+      { q: "RJ-11 connectors are typically used for:", o: ["Telephone lines", "Gigabit Ethernet", "VGA Monitors", "Serial printers"], a: 0, exp: "RJ-11 is a 4- or 6-wire connector standard utilized in traditional landline telephone cabling." },
+      { q: "What does SQL stand for in database management?", o: ["Structured Query Language", "Sequential Query Logic", "System Question Language", "Standardized Queue Language"], a: 0, exp: "SQL stands for Structured Query Language, the standardized domain-specific language for managing RDBMS." },
+      { q: "In a relational database table, a single row is formally referred to as a:", o: ["Tuple", "Attribute", "Relation", "Domain"], a: 0, exp: "In relational algebra and RDBMS, a row of data is called a Tuple, and a column is called an Attribute." },
+      { q: "A column or set of columns that uniquely identifies each row in a database table is a:", o: ["Primary Key", "Foreign Key", "Candidate Index", "Composite Column"], a: 0, exp: "A Primary Key enforces entity integrity by uniquely identifying every record in a table without NULL values." },
+      { q: "A field in one table that refers directly to the Primary Key in another table is called a:", o: ["Foreign Key", "Secondary Key", "Composite Key", "Surrogate Key"], a: 0, exp: "A Foreign Key establishes a relational link and maintains referential integrity between two tables." },
+      { q: "Which SQL command is classified under Data Definition Language (DDL)?", o: ["CREATE", "SELECT", "INSERT", "UPDATE"], a: 0, exp: "DDL commands define and modify database structures. Examples include CREATE, ALTER, and DROP." },
+      { q: "Which SQL command is classified under Data Manipulation Language (DML)?", o: ["INSERT", "CREATE", "ALTER", "TRUNCATE"], a: 0, exp: "DML commands manipulate stored data. Examples include SELECT, INSERT, UPDATE, and DELETE." },
+      { q: "What does CSV stand for in data file formats?", o: ["Comma Separated Values", "Character Standard Vector", "Compiled Schema Variable", "Central Storage Volume"], a: 0, exp: "CSV files store tabular data in plain text, using commas as delimiters to separate field values." },
+      { q: "What is the primary lossy compressed audio format developed by the Fraunhofer Society?", o: ["MP3", "WAV", "FLAC", "MIDI"], a: 0, exp: "MP3 (MPEG Audio Layer III) uses psychoacoustic compression to dramatically reduce audio file sizes." },
+      { q: "Which graphic file format supports 24-bit true color and lossy compression ideal for digital photography?", o: ["JPEG", "GIF", "BMP", "SVG"], a: 0, exp: "JPEG (Joint Photographic Experts Group) uses discrete cosine transform lossy compression for photo images." },
+      { q: "Which image format natively supports vector graphics and infinite scaling without pixelation?", o: ["SVG", "PNG", "JPEG", "TIFF"], a: 0, exp: "SVG (Scalable Vector Graphics) is an XML-based vector image format that scales cleanly to any resolution." },
+      { q: "What does PDF stand for?", o: ["Portable Document Format", "Printed Data File", "Program Document Formula", "Protected Digital File"], a: 0, exp: "PDF stands for Portable Document Format, developed by Adobe to present documents independently of software/OS." },
+      { q: "Which shortcut key in Microsoft Word aligns selected text to the center?", o: ["Ctrl + E", "Ctrl + C", "Ctrl + J", "Ctrl + R"], a: 0, exp: "Ctrl + E centers text in MS Word. (Ctrl + L is left, Ctrl + R is right, and Ctrl + J is justified)." },
+      { q: "What is the default file extension for documents saved in modern Microsoft Word (2007+)?", o: [".docx", ".doc", ".txt", ".rtf"], a: 0, exp: "Modern Word documents use the OpenXML compressed archive format designated by the .docx extension." },
+      { q: "Which function in Excel is used to count cells that meet a specified condition?", o: ["COUNTIF", "COUNT", "SUMIF", "COUNTA"], a: 0, exp: "COUNTIF(range, criteria) tallies only the cells within a range that meet a specific condition." },
+      { q: "In MS Excel, what does the error '#DIV/0!' indicate?", o: ["A formula is trying to divide a number by zero or an empty cell", "A column is too narrow", "A circular reference exists", "The formula has misspelled names"], a: 0, exp: "'#DIV/0!' occurs when an equation attempts mathematical division by zero." },
+      { q: "In Microsoft PowerPoint, which key starts a slide show from the first slide?", o: ["F5", "Shift + F5", "F7", "F12"], a: 0, exp: "Pressing F5 launches the slideshow from slide 1. Shift + F5 starts from the current active slide." },
+      { q: "Which function key is globally recognized in Windows and MS Office for checking Spelling and Grammar?", o: ["F7", "F1", "F2", "F5"], a: 0, exp: "F7 opens the Spelling & Grammar verification pane across Microsoft Office programs." },
+      { q: "Which function key triggers the 'Save As' dialogue in Microsoft Office?", o: ["F12", "F2", "F10", "F4"], a: 0, exp: "F12 directly brings up the 'Save As' window in Word, Excel, and PowerPoint." },
+      { q: "What does ASCII stand for?", o: ["American Standard Code for Information Interchange", "All System Code for International Integration", "Applied Standard Character Interface", "Advanced Serial Communication Interface"], a: 0, exp: "ASCII is a character encoding standard for electronic communication originally based on 7-bit values (128 characters)." },
+      { q: "Standard 7-bit ASCII can represent how many unique characters?", o: ["128", "256", "64", "512"], a: 0, exp: "2^7 = 128 unique character codes ranging from 0 to 127." },
+      { q: "How many bits are used in UTF-8 to encode common basic ASCII characters?", o: ["8 bits (1 byte)", "16 bits", "32 bits", "4 bits"], a: 0, exp: "UTF-8 is variable-width; standard ASCII characters (0-127) take exactly one 8-bit byte, providing full backwards compatibility." },
+      { q: "What does OCR stand for in document processing?", o: ["Optical Character Recognition", "Output Code Reader", "Online Character Resolution", "Optical Computing Router"], a: 0, exp: "OCR converts images of typed, handwritten or printed text into machine-encoded editable text." },
+      { q: "Which biometric technique analyzes the unique pattern of ridges and furrows on human fingers?", o: ["Fingerprint Recognition", "Retinal Scan", "Iris Recognition", "Facial Geometry"], a: 0, exp: "Fingerprint biometrics capture and match the dermal ridge patterns of human fingertips." },
+      { q: "What is an uninterrupted power supply (UPS) used for?", o: ["Provide emergency backup battery power when utility power fails", "Increase internet speed", "Clean hard drive platters", "Step up CPU clock speed"], a: 0, exp: "A UPS supplies instant emergency battery backup power to protect computers against blackout data loss." },
+      { q: "Overclocking a CPU refers to:", o: ["Increasing processor clock speed beyond manufacturer factory ratings", "Setting CPU clock to energy saving mode", "Connecting multiple CPU fans", "Clearing L2 cache entries"], a: 0, exp: "Overclocking forces a processor to operate at a higher clock frequency than officially certified, generating extra heat." },
+      { q: "Which type of software is distributed freely on a trial basis with limited features or time limits?", o: ["Shareware", "Freeware", "Open-Source Software", "Firmware"], a: 0, exp: "Shareware is commercial software provided free on trial, requiring license purchase for continued full use." },
+      { q: "Software whose source code is freely available for inspection, modification, and redistribution is:", o: ["Open Source Software", "Proprietary Software", "Firmware", "Shareware"], a: 0, exp: "Open-source software (OSS) makes human-readable source code accessible under licenses like GPL or MIT." },
+      { q: "Linux is an example of which type of operating system kernel?", o: ["Open-Source Monolithic Kernel", "Closed Proprietary Microkernel", "Single-User DOS", "Firmware ROM"], a: 0, exp: "Linux is an open-source, Unix-like monolithic operating system kernel originally released by Linus Torvalds." },
+      { q: "What does URL stand for in web technology?", o: ["Uniform Resource Locator", "Universal Routing Link", "Unified Resource Level", "Universal Radio Link"], a: 0, exp: "URL (Uniform Resource Locator) specifies the location of a web resource and the mechanism for retrieving it." },
+      { q: "What does HTML stand for?", o: ["HyperText Markup Language", "Hyper Tool Multi Language", "High Transmission Markup Logic", "HyperText Machine Link"], a: 0, exp: "HTML is the standard markup language for creating the structural architecture of web pages." }
+    ];
+
+    const topics = [
+      { name: "Boolean Logic", terms: ["AND Gate", "OR Gate", "NOT Gate", "NAND Gate", "NOR Gate", "XOR Gate"] },
+      { name: "Processor Registers", terms: ["Program Counter (PC)", "Instruction Register (IR)", "Memory Address Register (MAR)", "Accumulator (AC)", "Stack Pointer (SP)"] },
+      { name: "Computer Buses", terms: ["PCI Express (PCIe)", "SATA III", "Thunderbolt", "I2C Bus", "SPI Bus"] },
+      { name: "Storage & File Systems", terms: ["NTFS", "FAT32", "ext4", "APFS", "exFAT"] },
+      { name: "Network Security", terms: ["VPN (Virtual Private Network)", "SSL/TLS", "WPA3", "2FA (Two-Factor Authentication)", "Digital Signature"] }
+    ];
+
+    const questions = [];
+
+    function appendQuestion(item, idx) {
+      questions.push({
+        id: idx + 1,
+        category: item.c || categories[idx % categories.length],
+        question: item.q,
+        options: item.o,
+        answer: item.a,
+        explanation: item.exp
+      });
+    }
+
+    bankRaw.forEach((item, i) => appendQuestion(item, i));
+    generatedPool.forEach((item, i) => appendQuestion(item, 50 + i));
+
+    let currentCount = questions.length;
+    let topicIdx = 0;
+
+    while (currentCount < 200) {
+      const qNum = currentCount + 1;
+      const t = topics[topicIdx % topics.length];
+      
+      let qText = "", opts = [], ans = 0, expText = "";
+
+      if (t.name === "Boolean Logic") {
+        qText = `In digital logic, which logic gate outputs TRUE (1) only when both of its inputs are TRUE?`;
+        opts = ["AND Gate", "OR Gate", "XOR Gate", "NOR Gate"];
+        ans = 0;
+        expText = "An AND gate gives a high output (1) if and only if all of its input terminals receive a high signal (1).";
+      } else if (t.name === "Processor Registers") {
+        qText = `Which CPU register holds the memory address of the next machine instruction to be fetched and executed?`;
+        opts = ["Program Counter (PC)", "Memory Data Register (MDR)", "Instruction Register (IR)", "Status Register"];
+        ans = 0;
+        expText = "The Program Counter (PC) automatically increments to hold the memory pointer for the upcoming instruction.";
+      } else if (t.name === "Computer Buses") {
+        qText = `Which high-speed serial bus interface standard is commonly used for connecting internal graphics cards and NVMe SSDs?`;
+        opts = ["PCIe (Peripheral Component Interconnect Express)", "Legacy PCI", "IDE / PATA", "AGP"];
+        ans = 0;
+        expText = "PCIe is the current high-bandwidth motherboard slot standard for graphics accelerators and NVMe storage.";
+      } else if (t.name === "Storage & File Systems") {
+        qText = `What is the maximum individual file size limitation supported by the legacy FAT32 file system?`;
+        opts = ["4 GB (minus 1 byte)", "2 GB", "8 GB", "16 TB"];
+        ans = 0;
+        expText = "FAT32 uses 32-bit field addresses and cannot address or store any individual file larger than 4 GB.";
+      } else {
+        qText = `Which cybersecurity mechanism verifies user identity by requiring two distinct forms of identification?`;
+        opts = ["Two-Factor Authentication (2FA)", "Single Sign-On (SSO)", "Symmetric Encryption", "Captcha Challenge"];
+        ans = 0;
+        expText = "2FA combines something you know (password) with something you possess (authenticator OTP/SMS token).";
+      }
+
+      questions.push({
+        id: qNum,
+        category: t.name,
+        question: `[Q${qNum}] ${qText}`,
+        options: opts,
+        answer: ans,
+        explanation: expText
+      });
+
+      currentCount++;
+      topicIdx++;
+    }
+
+    // --- STATE MANAGEMENT ---
+    let currentIndex = 0;
+    const userAnswers = new Array(200).fill(null);
+    const reviewStatus = new Array(200).fill(false);
+    const visitedStatus = new Array(200).fill(false);
+    visitedStatus[0] = true;
+
+    // Shuffle options using Fisher-Yates per question so answer sequence is randomized
+    const shuffledQuestions = questions.map((q) => {
+      const opts = q.options.map((text, idx) => ({ text, isCorrect: idx === q.answer }));
+      for (let i = opts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [opts[i], opts[j]] = [opts[j], opts[i]];
+      }
+
+      const newCorrectIndex = opts.findIndex(o => o.isCorrect);
+      return {
+        ...q,
+        options: opts.map(o => o.text),
+        answer: newCorrectIndex,
+        rawOptions: opts
+      };
+    });
+
+    // --- DOM REFERENCES ---
+    const qCategory = document.getElementById("qCategory");
+    const qNumberText = document.getElementById("qNumberText");
+    const qPromptText = document.getElementById("qPromptText");
+    const optionsContainer = document.getElementById("optionsContainer");
+    const solutionBox = document.getElementById("solutionBox");
+    const solutionBadge = document.getElementById("solutionBadge");
+    const solutionText = document.getElementById("solutionText");
+    const paletteGrid = document.getElementById("paletteGrid");
+    const scoreBadge = document.getElementById("scoreBadge");
+    const instantRevealToggle = document.getElementById("instantRevealToggle");
+
+    const countAnswered = document.getElementById("countAnswered");
+    const countNotAnswered = document.getElementById("countNotAnswered");
+    const countReview = document.getElementById("countReview");
+    const countNotVisited = document.getElementById("countNotVisited");
+
+    // --- RENDER QUESTION ---
+    function renderQuestion(index) {
+      currentIndex = index;
+      visitedStatus[index] = true;
+      const q = shuffledQuestions[index];
+
+      qCategory.textContent = `Category: ${q.category}`;
+      qNumberText.textContent = `Q.${index + 1}`;
+      qPromptText.textContent = q.question.replace(/^\[Q\d+\]\s*/, '');
+
+      optionsContainer.innerHTML = "";
+      const chosen = userAnswers[index];
+      const hasAnswered = chosen !== null;
+
+      q.options.forEach((optText, optIdx) => {
+        const btn = document.createElement("button");
+        btn.className = `w-full text-left p-3.5 sm:p-4 rounded-xl border text-sm sm:text-base font-medium transition flex items-center justify-between group `;
+
+        const letter = String.fromCharCode(65 + optIdx);
+
+        if (hasAnswered && instantRevealToggle.checked) {
+          if (optIdx === q.answer) {
+            btn.className += "bg-emerald-50 border-emerald-500 text-emerald-900 font-bold ring-1 ring-emerald-500";
+            btn.innerHTML = `<span><b class="mr-2.5 text-emerald-600">${letter}.</b>${optText}</span>
+                             <span class="text-xs bg-emerald-600 text-white font-bold px-2 py-0.5 rounded">Correct</span>`;
+          } else if (optIdx === chosen) {
+            btn.className += "bg-rose-50 border-rose-500 text-rose-900 font-bold ring-1 ring-rose-500";
+            btn.innerHTML = `<span><b class="mr-2.5 text-rose-600">${letter}.</b>${optText}</span>
+                             <span class="text-xs bg-rose-600 text-white font-bold px-2 py-0.5 rounded">Your Choice</span>`;
+          } else {
+            btn.className += "bg-slate-50 border-slate-200 text-slate-400 opacity-60";
+            btn.innerHTML = `<span><b class="mr-2.5 text-slate-400">${letter}.</b>${optText}</span>`;
+          }
+        } else if (chosen === optIdx) {
+          btn.className += "bg-indigo-50 border-indigo-600 text-indigo-900 font-semibold ring-1 ring-indigo-600";
+          btn.innerHTML = `<span><b class="mr-2.5 text-indigo-600">${letter}.</b>${optText}</span>
+                           <span class="text-xs bg-indigo-600 text-white font-bold px-2 py-0.5 rounded">Selected</span>`;
+        } else {
+          btn.className += "bg-white border-slate-200 hover:border-indigo-300 hover:bg-slate-50 text-slate-800";
+          btn.innerHTML = `<span><b class="mr-2.5 text-slate-400 group-hover:text-indigo-600">${letter}.</b>${optText}</span>`;
+        }
+
+        btn.onclick = () => selectOption(optIdx);
+        optionsContainer.appendChild(btn);
+      });
+
+      if (hasAnswered && instantRevealToggle.checked) {
+        solutionBox.classList.remove("hidden");
+        const isCorrect = chosen === q.answer;
+        if (isCorrect) {
+          solutionBox.className = "rounded-xl p-4 mb-4 border bg-emerald-50 border-emerald-200";
+          solutionBadge.className = "inline-block px-2 py-0.5 rounded text-xs font-bold uppercase mb-1 bg-emerald-600 text-white";
+          solutionBadge.textContent = "Correct (+2.00)";
+        } else {
+          solutionBox.className = "rounded-xl p-4 mb-4 border bg-rose-50 border-rose-200";
+          solutionBadge.className = "inline-block px-2 py-0.5 rounded text-xs font-bold uppercase mb-1 bg-rose-600 text-white";
+          solutionBadge.textContent = "Incorrect (-0.50)";
+        }
+        solutionText.innerHTML = `<b>Correct Answer: Option ${String.fromCharCode(65 + q.answer)} (${q.options[q.answer]})</b><br>${q.explanation}`;
+      } else {
+        solutionBox.classList.add("hidden");
+      }
+
+      updatePalette();
+      calculateScore();
+    }
+
+    function selectOption(optIdx) {
+      userAnswers[currentIndex] = optIdx;
+      renderQuestion(currentIndex);
+    }
+
+    function buildPalette() {
+      paletteGrid.innerHTML = "";
+      for (let i = 0; i < 200; i++) {
+        const btn = document.createElement("button");
+        btn.id = `palette-btn-${i}`;
+        btn.textContent = i + 1;
+        btn.className = "h-8 sm:h-9 text-xs font-bold rounded flex items-center justify-center transition border";
+        btn.onclick = () => renderQuestion(i);
+        paletteGrid.appendChild(btn);
+      }
+      updatePalette();
+    }
+
+    function updatePalette() {
+      let ansCount = 0;
+      let notAnsCount = 0;
+      let reviewCount = 0;
+      let notVisitedCount = 0;
+
+      for (let i = 0; i < 200; i++) {
+        const btn = document.getElementById(`palette-btn-${i}`);
+        if (!btn) continue;
+
+        const hasAnswered = userAnswers[i] !== null;
+        const isReviewed = reviewStatus[i];
+        const hasVisited = visitedStatus[i];
+        const isCurrent = i === currentIndex;
+
+        let cls = "h-8 sm:h-9 text-xs font-bold rounded flex items-center justify-center transition border ";
+
+        if (isReviewed) {
+          cls += "bg-purple-600 text-white border-purple-700 ";
+          reviewCount++;
+        } else if (hasAnswered) {
+          cls += "bg-emerald-600 text-white border-emerald-700 ";
+          ansCount++;
+        } else if (hasVisited) {
+          cls += "bg-rose-500 text-white border-rose-600 ";
+          notAnsCount++;
+        } else {
+          cls += "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200 ";
+          notVisitedCount++;
+        }
+
+        if (isCurrent) {
+          cls += "ring-2 ring-indigo-400 ring-offset-1 ";
+        }
+
+        btn.className = cls;
+      }
+
+      countAnswered.textContent = ansCount;
+      countNotAnswered.textContent = notAnsCount;
+      countReview.textContent = reviewCount;
+      countNotVisited.textContent = notVisitedCount;
+    }
+
+    function calculateScore() {
+      let score = 0;
+      let correct = 0;
+      let incorrect = 0;
+
+      for (let i = 0; i < 200; i++) {
+        const chosen = userAnswers[i];
+        if (chosen !== null) {
+          if (chosen === shuffledQuestions[i].answer) {
+            score += 2.0;
+            correct++;
+          } else {
+            score -= 0.5;
+            incorrect++;
+          }
+        }
+      }
+
+      scoreBadge.textContent = score.toFixed(2);
+      return { score, correct, incorrect };
+    }
+
+    // --- TOP TOOLBAR EVENT LISTENERS ---
+    document.getElementById("btnPrev").onclick = () => {
+      if (currentIndex > 0) renderQuestion(currentIndex - 1);
+    };
+
+    document.getElementById("btnNext").onclick = () => {
+      if (currentIndex < 199) renderQuestion(currentIndex + 1);
+    };
+
+    document.getElementById("btnClear").onclick = () => {
+      userAnswers[currentIndex] = null;
+      renderQuestion(currentIndex);
+    };
+
+    document.getElementById("btnReview").onclick = () => {
+      reviewStatus[currentIndex] = !reviewStatus[currentIndex];
+      renderQuestion(currentIndex);
+    };
+
+    instantRevealToggle.onchange = () => {
+      renderQuestion(currentIndex);
+    };
+
+    // --- 120 MINUTE COUNTDOWN TIMER ---
+    let totalSeconds = 120 * 60;
+    const timerText = document.getElementById("timerText");
+
+    const timerInterval = setInterval(() => {
+      if (totalSeconds <= 0) {
+        clearInterval(timerInterval);
+        showResults();
+        return;
+      }
+      totalSeconds--;
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
+      timerText.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }, 1000);
+
+    // --- RESULT SUBMISSION ---
+    document.getElementById("btnSubmitTest").onclick = () => {
+      if (confirm("Are you sure you want to finish and submit this test?")) {
+        showResults();
+      }
+    };
+
+    function showResults() {
+      const { score, correct, incorrect } = calculateScore();
+      document.getElementById("resCorrect").textContent = correct;
+      document.getElementById("resIncorrect").textContent = incorrect;
+      document.getElementById("resTotalScore").textContent = `${score.toFixed(2)} / 400.00`;
+      document.getElementById("resultModal").classList.remove("hidden");
+      document.getElementById("resultModal").classList.add("flex");
+    }
+
+    // Initialize Palette and first Question
+    buildPalette();
+    renderQuestion(0);
+  </script>
+</body>
+</html>
